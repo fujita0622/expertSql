@@ -50,27 +50,31 @@ FROM
   greatests
 ;
 
+
 ●問2
--- keyとx,y,zの中の最大値を取得
 SELECT
-  key,
-  -- x,y,zの中の最大値の取得条件
-CASE 
-  -- 条件1
-  -- xがyとzより大きい場合,xのカラムを取得
-  WHEN x > y AND x > z THEN x
-  -- 条件2
-  -- yがxとzより大きい場合,yのカラムを取得
-  WHEN y > x AND y > z THEN y
-  -- 条件3
-  -- zがxとyより大きい場合,zのカラムを取得
-  WHEN z > x AND z > y THEN z
--- 上記条件に該当しない場合
--- xのカラムを取得 
-ELSE 
-  x
--- x,y,zの中の最大値の列名に greatest と命名
-END AS greatest
+  -- 取得列
+  key, -- キー
+  -- x,y,zの中の最大値
+  CASE 
+    -- 条件1
+    -- x,y,zの中で最大値のカラムを取得
+    WHEN x > y AND x > z THEN x
+    WHEN y > x AND y > z THEN y
+    WHEN z > x AND z > y THEN z
+    -- 条件2
+    -- x,y,zの中で二カラムの値が同じで かつ もう一カラムの値が低い場合
+    -- 値が高いカラムのどちらかを取得
+    WHEN x = y AND x > z THEN x
+    WHEN x = z AND x > y THEN x
+    WHEN y = z AND y > x THEN y
+    -- 条件3
+  -- 上記条件に該当しない場合
+  -- 0を指定
+  ELSE
+    0
+  -- x,y,zの中の最大値の列名に greatest と命名
+  END AS greatest
 -- greatestsテーブルから取得
 FROM
   greatests
@@ -98,16 +102,32 @@ export_sql-# ;
  D   |        3
 (4 rows)
 
+
 ●問2
 export_sql=# SELECT
-export_sql-#   key,
-export_sql-# CASE 
-export_sql-#   WHEN x > y AND x > z THEN x
-export_sql-#   WHEN y > x AND y > z THEN y
-export_sql-#   WHEN z > x AND z > y THEN z
-export_sql-# ELSE 
-export_sql-#   x
-export_sql-# END AS greatest
+export_sql-#   -- 取得列
+export_sql-#   key, -- キー
+export_sql-#   -- x,y,zの中の最大値
+export_sql-#   CASE 
+export_sql-#     -- 条件1
+export_sql-#     -- x,y,zの中で最大値のカラムを取得
+export_sql-#     WHEN x > y AND x > z THEN x
+export_sql-#     WHEN y > x AND y > z THEN y
+export_sql-#     WHEN z > x AND z > y THEN z
+export_sql-#     -- 条件2
+export_sql-#     -- x,y,zの中で二カラムの値が同じで かつ もう一カラムの値が低い 場合
+export_sql-#     -- 値が高いカラムのどちらかを取得
+export_sql-#     WHEN x = y AND x > z THEN x
+export_sql-#     WHEN x = z AND x > y THEN x
+export_sql-#     WHEN y = z AND y > x THEN y
+export_sql-#     -- 条件3
+export_sql-#   -- 上記条件に該当しない場合
+export_sql-#   -- 0を指定
+export_sql-#   ELSE
+export_sql-#     0
+export_sql-#   -- x,y,zの中の最大値の列名に greatest と命名
+export_sql-#   END AS greatest
+export_sql-# -- greatestsテーブルから取得
 export_sql-# FROM
 export_sql-#   greatests
 export_sql-# ;
