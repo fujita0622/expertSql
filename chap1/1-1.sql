@@ -69,6 +69,8 @@ SELECT
     WHEN x = z AND x > y THEN x
     WHEN y = z AND y > x THEN y
     -- 条件3
+    -- x,y,z全て最大値の場合
+    WHEN x = y AND x = z THEN x
   -- 上記条件に該当しない場合
   -- 0を指定
   ELSE
@@ -121,6 +123,8 @@ export_sql-#     WHEN x = y AND x > z THEN x
 export_sql-#     WHEN x = z AND x > y THEN x
 export_sql-#     WHEN y = z AND y > x THEN y
 export_sql-#     -- 条件3
+export_sql-#     -- x,y,z全て最大値の場合
+export_sql-#     WHEN x = y AND x = z THEN x
 export_sql-#   -- 上記条件に該当しない場合
 export_sql-#   -- 0を指定
 export_sql-#   ELSE
